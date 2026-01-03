@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindMaze - Your Mental Wellness Companion</title>
+    <link rel="stylesheet" href="frontend/styles.css">
+</head>
+<body>
+    <!-- Authentication Page -->
+    <div id="authPage" class="page active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="emoji-title">🧩</div>
+                <h1>Welcome to MindMaze</h1>
+                <p class="subtitle">Your safe space for mental wellness</p>
+                
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" onclick="switchAuthTab('login')">Sign In</button>
+                    <button class="auth-tab-btn" onclick="switchAuthTab('signup')">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form active">
+                    <div class="form-group">
+                        <label for="loginEmail">Email:</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password:</label>
+                        <input type="password" id="loginPassword" placeholder="Enter password">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginAge">Age (13-19):</label>
+                        <input type="number" id="loginAge" placeholder="Enter your age" min="13" max="19">
+                    </div>
+                    <p id="loginError" class="error-message"></p>
+                    <button onclick="handleLogin()" class="btn btn-primary btn-large">Sign In</button>
+                </div>
+
+                <!-- Sign Up Form -->
+                <div id="signupForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="signupEmail">Email:</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password:</label>
+                        <input type="password" id="signupPassword" placeholder="Create password (min 6 chars)">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupConfirm">Confirm Password:</label>
+                        <input type="password" id="signupConfirm" placeholder="Confirm password">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupAge">Age (13-19):</label>
+                        <input type="number" id="signupAge" placeholder="Enter your age" min="13" max="19">
+                    </div>
+                    <p id="signupError" class="error-message"></p>
+                    <button onclick="handleSignup()" class="btn btn-primary btn-large">Create Account</button>
+                </div>
+
+                <div class="disclaimer">
+                    <p>By continuing, you agree to our commitment to your privacy and safety.</p>
+                    <p>This is a support platform, not a medical service.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="page">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <span class="logo-emoji">🧩</span>
+                        <h1>MindMaze</h1>
+                    </div>
+                    <p class="tagline">Your space, your peace, your growth</p>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-email"></span>
+                        <button onclick="handleLogout()" class="btn btn-outline btn-small">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <div class="container">
+                <button class="tab-btn active" onclick="switchTab('checkin')">📊 Check-In</button>
+                <button class="tab-btn" onclick="switchTab('growth')">📈 Growth Map</button>
+                <button class="tab-btn" onclick="switchTab('games')">🎮 Games</button>
+                <button class="tab-btn" onclick="switchTab('emergency')">🆘 Help</button>
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="container main-content">
+            <!-- Check-In Tab -->
+            <div id="checkinTab" class="tab-content active">
+                <div class="card">
+                    <h2>How are you feeling today?</h2>
+                    <p class="subtitle">Check in with your emotions - no judgment, just honesty</p>
+                    
+                    <div class="mood-grid">
+                        <button class="mood-btn" onclick="selectMood('happy')" data-mood="happy" title="Happy">😊</button>
+                        <button class="mood-btn" onclick="selectMood('sad')" data-mood="sad" title="Sad">😢</button>
+                        <button class="mood-btn" onclick="selectMood('anxious')" data-mood="anxious" title="Anxious">😰</button>
+                        <button class="mood-btn" onclick="selectMood('angry')" data-mood="angry" title="Angry">😠</button>
+                        <button class="mood-btn" onclick="selectMood('neutral')" data-mood="neutral" title="Neutral">😐</button>
+                        <button class="mood-btn" onclick="selectMood('excited')" data-mood="excited" title="Excited">🤩</button>
+                        <button class="mood-btn" onclick="selectMood('calm')" data-mood="calm" title="Calm">😌</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="moodNotes">Add a note (optional):</label>
+                        <textarea id="moodNotes" placeholder="What's on your mind?" rows="3"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button onclick="saveMood()" id="saveMoodBtn" class="btn btn-primary" disabled>Save Check-in</button>
+                    </div>
+
+                    <div id="successMessage" class="success-message" style="display: none;">
+                        ✓ Great job checking in! Keep going! 🌟
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Map Tab -->
+            <div id="growthTab" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalMoods">0</div>
+                        <div class="stat-label">Total Check-ins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="weekMoods">0</div>
+                        <div class="stat-label">This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activePercent">0%</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Mood Distribution</h3>
+                    <canvas id="moodChart" width="400" height="200"></canvas>
+                </div>
+
+                <div class="card">
+                    <h3>Your Mood History</h3>
+                    <div id="historyList" class="history-list"></div>
+                </div>
+            </div>
+
+            <!-- Games Tab -->
+            <div id="gamesTab" class="tab-content">
+                <div class="games-grid">
+                    <div class="game-card" onclick="startGame('breathing')">
+                        <div class="game-emoji">🫁</div>
+                        <h3>Breathing Exercise</h3>
+                        <p>Guided 4-7-8 breathing for instant calm</p>
+                        <button class="btn btn-outline">Play Now</button>
+                    </div>
+                    <div class="game-card" onclick="startGame('focus')">
+                        <div class="game-emoji">🎮</div>
+                        <h3>Focus Match</h3>
+                        <p>Match pairs and boost concentration</p>
+                        <button class="btn btn-outline">Play Now</button>
+                    </div>
+                    <div class="game-card" onclick="startGame('puzzle')">
+                        <div class="game-emoji">🧩</div>
+                        <h3>Calm Puzzle</h3>
+                        <p>Relax with soothing tile puzzles</p>
+                        <button class="btn btn-outline">Play Now</button>
+                    </div>
+                </div>
+
+                <!-- Game Modals -->
+                <div id="breathingModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Guided Breathing</h2>
+                        <div class="breathing-circle" id="breathingCircle">🫁</div>
+                        <div class="breathing-text" id="breathingText">Breathe In</div>
+                        <div class="breathing-cycle">Cycles: <span id="cycleCount">0</span></div>
+                        <button onclick="toggleBreathing()" id="breathingBtn" class="btn btn-primary">Start</button>
+                    </div>
+                </div>
+
+                <div id="focusModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Focus Match Game</h2>
+                        <div class="score-display">Score: <span id="focusScore">0</span></div>
+                        <div class="focus-grid" id="focusGrid"></div>
+                        <button onclick="resetFocusGame()" class="btn btn-secondary">Reset Game</button>
+                    </div>
+                </div>
+
+                <div id="puzzleModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Calm Puzzle</h2>
+                        <div class="puzzle-grid" id="puzzleGrid"></div>
+                        <div class="progress">Progress: <span id="puzzleProgress">0</span>/9</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Tab -->
+            <div id="emergencyTab" class="tab-content">
+                <div class="card emergency-card">
+                    <div class="emergency-header">
+                        <span class="emoji">🆘</span>
+                        <div>
+                            <h2>Emergency Support</h2>
+                            <p>If you're in crisis, reach out now</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box warning">
+                        <strong>⚠️ Disclaimer:</strong> MindMaze is NOT a substitute for professional medical advice or treatment.
+                    </div>
+
+                    <div class="form-group">
+                        <label for="countrySelect">Select your location:</label>
+                        <select id="countrySelect" onchange="updateHelpline()">
+                            <option value="US">United States</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="IN">India</option>
+                        </select>
+                    </div>
+
+                    <div id="helplineBox" class="helpline-box">
+                        <p class="helpline-label" id="helplineName"></p>
+                        <p class="helpline-number" id="helplineNumber"></p>
+                        <button class="btn btn-danger">📞 Call Now</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>💡 Things You Can Do Now</h3>
+                        <ul class="action-list">
+                            <li>✓ Call or text a trusted friend or family member</li>
+                            <li>✓ Practice a breathing or grounding exercise</li>
+                            <li>✓ Go to your nearest emergency room if in immediate danger</li>
+                            <li>✓ Reach out to a school counselor or trusted adult</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>🧩 MindMaze — Your Mental Wellness Companion</p>
+                <p>Built with care. Designed for safety. Made for you.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="frontend/firebase-auth.js"></script>
+    <script src="frontend/app.js"></script>
+</body>
+</html>

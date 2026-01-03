@@ -18,30 +18,39 @@ async function initializeFirebase() {
     try {
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js");
         const { getAuth, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js");
-        const { getDatabase } = await import("https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js");
+        const { getDatabase, ref, get } = await import("https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js");
 
         const app = initializeApp(firebaseConfig);
         auth = getAuth(app);
         database = getDatabase(app);
 
         // Monitor auth state changes
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // User is signed in
                 state.userId = user.uid;
                 state.userEmail = user.email;
+                
+                // Fetch user data to get the name
+                const userSnapshot = await get(ref(database, 'users/' + user.uid));
+                const userData = userSnapshot.val();
+                state.userName = userData?.name || 'User';
+                
                 localStorage.setItem('userId', user.uid);
                 localStorage.setItem('userEmail', user.email);
+                localStorage.setItem('userName', state.userName);
                 showMainApp();
-                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userName').textContent = state.userName;
                 updateGrowthMap();
                 updateHelpline();
             } else {
                 // User is signed out
                 state.userId = null;
                 state.userEmail = null;
+                state.userName = null;
                 localStorage.removeItem('userId');
                 localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
                 showAuthPage();
             }
         });
@@ -59,6 +68,7 @@ async function handleSignup() {
         const { createUserWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js");
         const { ref, set } = await import("https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js");
 
+        const name = document.getElementById('signupName').value.trim();
         const email = document.getElementById('signupEmail').value.trim();
         const password = document.getElementById('signupPassword').value;
         const confirmPassword = document.getElementById('signupConfirm').value;
@@ -68,6 +78,10 @@ async function handleSignup() {
         errorEl.textContent = '';
 
         // Validation
+        if (!name) {
+            errorEl.textContent = 'Name is required';
+            return;
+        }
         if (!email) {
             errorEl.textContent = 'Email is required';
             return;
@@ -91,6 +105,7 @@ async function handleSignup() {
 
         // Store user data in Realtime Database
         await set(ref(database, 'users/' + user.uid), {
+            name: name,
             email: email,
             age: age,
             createdAt: new Date().toISOString(),
@@ -99,14 +114,16 @@ async function handleSignup() {
 
         state.userId = user.uid;
         state.userEmail = email;
+        state.userName = name;
         state.age = age;
 
         localStorage.setItem('userId', user.uid);
         localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', name);
         localStorage.setItem('age', age);
 
         showMainApp();
-        document.getElementById('userEmail').textContent = email;
+        document.getElementById('userName').textContent = name;
 
     } catch (error) {
         const errorEl = document.getElementById('signupError');
@@ -152,14 +169,16 @@ async function handleLogin() {
 
         state.userId = user.uid;
         state.userEmail = email;
+        state.userName = userData?.name || 'User';
         state.age = userData?.age || age;
 
         localStorage.setItem('userId', user.uid);
         localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', state.userName);
         localStorage.setItem('age', state.age);
 
         showMainApp();
-        document.getElementById('userEmail').textContent = email;
+        document.getElementById('userName').textContent = state.userName;
 
     } catch (error) {
         const errorEl = document.getElementById('loginError');
@@ -183,6 +202,7 @@ async function handleLogout() {
         
         state.userId = null;
         state.userEmail = null;
+        state.userName = null;
         state.moods = [];
         state.selectedMood = null;
 

@@ -2,6 +2,7 @@
 const state = {
     userId: localStorage.getItem('userId') || null,
     userEmail: localStorage.getItem('userEmail') || null,
+    userName: localStorage.getItem('userName') || null,
     age: localStorage.getItem('age') || null,
     moods: JSON.parse(localStorage.getItem('moods') || '[]'),
     selectedMood: null,

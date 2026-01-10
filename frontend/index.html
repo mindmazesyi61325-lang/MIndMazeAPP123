@@ -164,24 +164,57 @@
 
             <!-- Games Tab -->
             <div id="gamesTab" class="tab-content">
-                <div class="games-grid">
-                    <div class="game-card" onclick="startGame('breathing')">
-                        <div class="game-emoji">🫁</div>
-                        <h3>Breathing Exercise</h3>
-                        <p>Guided 4-7-8 breathing for instant calm</p>
-                        <button class="btn btn-outline">Play Now</button>
-                    </div>
-                    <div class="game-card" onclick="startGame('focus')">
-                        <div class="game-emoji">🎮</div>
-                        <h3>Focus Match</h3>
-                        <p>Match pairs and boost concentration</p>
-                        <button class="btn btn-outline">Play Now</button>
-                    </div>
-                    <div class="game-card" onclick="startGame('puzzle')">
-                        <div class="game-emoji">🧩</div>
-                        <h3>Calm Puzzle</h3>
-                        <p>Relax with soothing tile puzzles</p>
-                        <button class="btn btn-outline">Play Now</button>
+                <div class="games-container">
+                    <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2rem;">🎮 Wellness Games</h2>
+                    <div class="games-grid">
+                        <div class="game-card" onclick="startGame('breathing')">
+                            <div class="game-emoji">🫁</div>
+                            <h3>Breathing</h3>
+                            <p>4-7-8 guided breathing for calm</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
+                        <div class="game-card" onclick="startGame('focus')">
+                            <div class="game-emoji">🎮</div>
+                            <h3>Focus Match</h3>
+                            <p>Match pairs & boost focus</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
+                        <div class="game-card" onclick="startGame('puzzle')">
+                            <div class="game-emoji">🧩</div>
+                            <h3>Calm Puzzle</h3>
+                            <p>Relax with tile puzzles</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
+                        <div class="game-card" onclick="startGame('color')">
+                            <div class="game-emoji">🎨</div>
+                            <h3>Color Zen</h3>
+                            <p>Match colors & find harmony</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
+                        <div class="game-card" onclick="startGame('memory')">
+                            <div class="game-emoji">🧠</div>
+                            <h3>Memory Flips</h3>
+                            <p>Sharpen memory with fun flips</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
+                        <div class="game-card" onclick="startGame('click')">
+                            <div class="game-emoji">⚡</div>
+                            <h3>Reflex Rush</h3>
+                            <p>Test your reaction time</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
+                        <div class="game-card" onclick="startGame('zen')">
+                            <div class="game-emoji">🕉️</div>
+                            <h3>Zen Tap</h3>
+                            <p>Rhythmic tapping meditation</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
+                        <div class="game-card" onclick="startGame('journey')">
+                            <div class="game-emoji">🌈</div>
+                            <h3>Dream Path</h3>
+                            <p>Create your healing journey</p>
+                            <button class="btn btn-outline">Play</button>
+                        </div>
                     </div>
                 </div>
 
@@ -213,6 +246,66 @@
                         <h2>Calm Puzzle</h2>
                         <div class="puzzle-grid" id="puzzleGrid"></div>
                         <div class="progress">Progress: <span id="puzzleProgress">0</span>/9</div>
+                    </div>
+                </div>
+
+                <div id="colorModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Color Zen</h2>
+                        <div class="score-display">Score: <span id="colorScore">0</span></div>
+                        <div id="colorGrid" class="color-grid"></div>
+                        <button onclick="resetColorGame()" class="btn btn-secondary">Reset Game</button>
+                    </div>
+                </div>
+
+                <div id="memoryModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Memory Flips</h2>
+                        <div class="score-display">Matches: <span id="memoryScore">0</span>/6</div>
+                        <div id="memoryGrid" class="memory-grid"></div>
+                        <button onclick="resetMemoryGame()" class="btn btn-secondary">Reset Game</button>
+                    </div>
+                </div>
+
+                <div id="clickModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Reflex Rush</h2>
+                        <div class="click-display">
+                            <div class="click-score-box">
+                                <span class="click-label">Score:</span>
+                                <span id="clickScore" class="click-big">0</span>
+                            </div>
+                            <div class="click-time-box">
+                                <span class="click-label">Time:</span>
+                                <span id="clickTimer" class="click-big">30</span>s
+                            </div>
+                        </div>
+                        <div id="clickTarget" class="click-target">Click!</div>
+                        <button id="clickStartBtn" onclick="startClickGame()" class="btn btn-primary">Start Game</button>
+                    </div>
+                </div>
+
+                <div id="zenModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Zen Tap</h2>
+                        <div class="score-display">Harmony: <span id="zenScore">0</span>%</div>
+                        <div class="zen-instruction">Follow the rhythm and tap the orbs</div>
+                        <div id="zenGrid" class="zen-grid"></div>
+                        <button onclick="resetZenGame()" class="btn btn-secondary">Reset Game</button>
+                    </div>
+                </div>
+
+                <div id="journeyModal" class="modal">
+                    <div class="modal-content">
+                        <button onclick="closeGame()" class="close-btn">&times;</button>
+                        <h2>Dream Path</h2>
+                        <div class="score-display">Journey: <span id="journeyStep">1</span>/5</div>
+                        <div id="journeyPath" class="journey-path"></div>
+                        <button onclick="nextJourneyStep()" class="btn btn-primary">Next Step</button>
                     </div>
                 </div>
             </div>

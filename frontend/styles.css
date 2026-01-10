@@ -1,4 +1,4 @@
-/* ===== MODERN FUTURISTIC STYLES WITH EMERALD GREEN ===== */
+/* ===== MODERN FUTURISTIC STYLES WITH VIBRANT EMERALD & COSMIC BLEND ===== */
 * {
     margin: 0;
     padding: 0;
@@ -11,11 +11,21 @@ html {
 
 body {
     font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1a3a3a 25%, #0f2f2f 50%, #1a2e2e 75%, #0a1f1f 100%);
+    background: linear-gradient(135deg, #0a1428 0%, #1a1a2e 20%, #16213e 40%, #0f3460 60%, #1a1a2e 80%, #0a0e27 100%);
     min-height: 100vh;
     color: #e0e7ff;
     position: relative;
     overflow-x: hidden;
+    animation: backgroundShift 20s ease infinite;
+}
+
+@keyframes backgroundShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 /* Animated background gradient */
@@ -26,10 +36,22 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(ellipse at 20% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(5, 150, 105, 0.1) 0%, transparent 50%);
+    background: 
+        radial-gradient(ellipse at 20% 50%, rgba(16, 185, 129, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
+    animation: gradientFloat 8s ease-in-out infinite;
+}
+
+@keyframes gradientFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 body * {
@@ -40,7 +62,7 @@ body * {
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
 }
 
 /* ===== PAGE STRUCTURE ===== */
@@ -298,7 +320,12 @@ body * {
 
 /* ===== MAIN CONTENT ===== */
 .main-content {
-    padding: 3rem 0;
+    padding: 2rem 0 4rem 0;
+    min-height: 60vh;
+}
+
+.games-container {
+    padding: 2rem 0;
 }
 
 .tab-content {
@@ -326,8 +353,8 @@ body * {
     background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(16, 185, 129, 0.1) 100%);
     border: 1px solid rgba(16, 185, 129, 0.2);
     backdrop-filter: blur(10px);
-    border-radius: 1rem;
-    padding: 2rem;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
     box-shadow: 0 8px 32px rgba(16, 185, 129, 0.08), 
                 inset 0 1px 0 rgba(16, 185, 129, 0.1);
     margin-bottom: 2rem;
@@ -817,50 +844,77 @@ body * {
 /* ===== GAMES ===== */
 .games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2.5rem;
+    padding: 2rem 0;
 }
 
 .game-card {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(30, 58, 138, 0.2) 100%);
-    border: 2px solid rgba(16, 185, 129, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 1.25rem;
-    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(138, 43, 226, 0.1) 100%);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    backdrop-filter: blur(12px);
+    border-radius: 1.5rem;
+    padding: 2rem 1.75rem;
     text-align: center;
-    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.08);
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1), 0 0 40px rgba(138, 43, 226, 0.05);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
 }
 
 .game-card:hover {
     border-color: #10b981;
-    box-shadow: 0 16px 48px rgba(16, 185, 129, 0.25);
-    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(16, 185, 129, 0.35), 0 0 60px rgba(138, 43, 226, 0.15);
+    transform: translateY(-10px) scale(1.02);
+}
+
+.game-card:hover::before {
+    opacity: 1;
 }
 
 .game-emoji {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5));
-    transition: transform 0.3s ease;
+    font-size: 4.5rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.6));
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-block;
 }
 
 .game-card:hover .game-emoji {
-    transform: scale(1.1) rotateY(10deg);
+    transform: scale(1.15) rotateZ(15deg) rotateY(20deg);
+    filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.8));
 }
 
 .game-card h3 {
     margin-bottom: 0.75rem;
-    color: #34d399;
-    font-size: 1.35rem;
+    background: linear-gradient(135deg, #10b981, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.4rem;
+    font-weight: 700;
 }
 
 .game-card p {
     color: #a0aec0;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem;
     font-size: 0.95rem;
     line-height: 1.6;
+    min-height: 2.8rem;
 }
 
 /* ===== MODALS ===== */
@@ -1170,6 +1224,304 @@ body * {
     background-clip: text;
 }
 
+/* ===== COLOR ZEN GAME ===== */
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.color-tile {
+    aspect-ratio: 1;
+    border: 3px solid rgba(16, 185, 129, 0.3);
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    animation: colorPulse 2s ease-in-out infinite;
+}
+
+@keyframes colorPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.color-tile:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
+}
+
+.color-tile.matched {
+    border-color: #10b981;
+    opacity: 0.6;
+    animation: colorMatch 0.6s ease;
+}
+
+@keyframes colorMatch {
+    0% {
+        transform: scale(1.1);
+    }
+    50% {
+        filter: brightness(1.3);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+}
+
+/* ===== MEMORY GAME ===== */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    border: 3px solid rgba(138, 43, 226, 0.4);
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(138, 43, 226, 0.2);
+}
+
+.memory-card:hover:not(.flipped) {
+    transform: scale(1.08);
+    border-color: #a855f7;
+    box-shadow: 0 12px 32px rgba(168, 85, 247, 0.4);
+}
+
+.memory-card.flipped {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.5) 0%, rgba(168, 85, 247, 0.5) 100%);
+    border-color: #7c3aed;
+    color: white;
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.5);
+}
+
+.memory-card.matched {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.5) 0%, rgba(52, 211, 153, 0.5) 100%);
+    border-color: #10b981;
+    opacity: 0.8;
+}
+
+/* ===== CLICK GAME ===== */
+.click-display {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-around;
+    margin: 2rem 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.click-score-box, .click-time-box {
+    text-align: center;
+    flex: 1;
+}
+
+.click-label {
+    display: block;
+    color: #a0aec0;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.click-big {
+    display: block;
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.click-target {
+    width: 120px;
+    height: 120px;
+    margin: 2rem auto;
+    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    border: 4px solid #dc2626;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+    animation: targetPulse 1s ease-in-out infinite;
+}
+
+@keyframes targetPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 12px 32px rgba(239, 68, 68, 0.6);
+    }
+}
+
+.click-target:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+.click-target.hiding {
+    animation: hideTarget 0.3s ease;
+}
+
+@keyframes hideTarget {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+/* ===== ZEN GAME ===== */
+.zen-instruction {
+    text-align: center;
+    color: #a0aec0;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.zen-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.zen-orb {
+    width: 100%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.4), rgba(16, 185, 129, 0.1));
+    border: 3px solid rgba(16, 185, 129, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2), inset 0 0 20px rgba(16, 185, 129, 0.1);
+    animation: orbGlow 3s ease-in-out infinite;
+}
+
+@keyframes orbGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.2), inset 0 0 20px rgba(16, 185, 129, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.5), inset 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+}
+
+.zen-orb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.6), inset 0 0 30px rgba(16, 185, 129, 0.4);
+}
+
+.zen-orb.tapped {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    border-color: #10b981;
+    transform: scale(0.9);
+    animation: orbTap 0.5s ease;
+}
+
+@keyframes orbTap {
+    0% {
+        transform: scale(1.15);
+        filter: brightness(1.5);
+    }
+    100% {
+        transform: scale(0.9);
+        filter: brightness(1);
+    }
+}
+
+/* ===== JOURNEY GAME ===== */
+.journey-path {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+    padding: 2rem 0;
+}
+
+.journey-step {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    position: relative;
+    opacity: 0.5;
+}
+
+.journey-step.active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(59, 130, 246, 0.2) 100%);
+    border-color: #10b981;
+    opacity: 1;
+    transform: scale(1.02);
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
+    animation: journeyPulse 1s ease-in-out infinite;
+}
+
+@keyframes journeyPulse {
+    0%, 100% {
+        box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
+    }
+    50% {
+        box-shadow: 0 16px 48px rgba(16, 185, 129, 0.4);
+    }
+}
+
+.journey-step .step-emoji {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5));
+}
+
+.journey-step .step-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #34d399;
+    margin-bottom: 0.5rem;
+}
+
+.journey-step .step-text {
+    color: #a0aec0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .header-content {
@@ -1193,11 +1545,12 @@ body * {
     }
 
     .card {
-        padding: 1.5rem;
+        padding: 1.75rem;
     }
 
     .mood-grid {
         grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
     }
 
     .stats-grid {
@@ -1205,22 +1558,49 @@ body * {
     }
 
     .games-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
     }
 
     .main-content {
-        padding: 1rem 0;
+        padding: 1.5rem 0;
     }
 
     .modal-content {
         max-width: 95%;
         padding: 1.5rem;
     }
+
+    .color-grid, .memory-grid {
+        gap: 1rem;
+    }
+
+    .zen-grid {
+        gap: 1.5rem;
+    }
+
+    .click-display {
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    .click-big {
+        font-size: 2.5rem;
+    }
+
+    .click-target {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 @media (max-width: 480px) {
     .logo h1 {
         font-size: 1.25rem;
+    }
+
+    .container {
+        padding: 0 1rem;
     }
 
     .mood-grid {
@@ -1233,9 +1613,44 @@ body * {
 
     .focus-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
     }
 
     .puzzle-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+
+    .games-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .color-grid, .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+
+    .zen-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .game-emoji {
+        font-size: 3.5rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .click-display {
+        flex-direction: column;
+        gap: 1rem;
     }
 }

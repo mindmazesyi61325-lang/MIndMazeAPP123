@@ -215,6 +215,21 @@ function startGame(gameType) {
     } else if (gameType === 'puzzle') {
         document.getElementById('puzzleModal').classList.add('active');
         initPuzzleGame();
+    } else if (gameType === 'color') {
+        document.getElementById('colorModal').classList.add('active');
+        initColorGame();
+    } else if (gameType === 'memory') {
+        document.getElementById('memoryModal').classList.add('active');
+        initMemoryGame();
+    } else if (gameType === 'click') {
+        document.getElementById('clickModal').classList.add('active');
+        initClickGame();
+    } else if (gameType === 'zen') {
+        document.getElementById('zenModal').classList.add('active');
+        initZenGame();
+    } else if (gameType === 'journey') {
+        document.getElementById('journeyModal').classList.add('active');
+        initJourneyGame();
     }
 }
 
@@ -408,3 +423,288 @@ window.addEventListener('DOMContentLoaded', () => {
         updateHelpline();
     }
 });
+
+// ===== COLOR ZEN GAME =====
+function initColorGame() {
+    const colors = [
+        '#ef4444', '#f87171', '#10b981',
+        '#34d399', '#3b82f6', '#60a5fa',
+        '#ef4444', '#f87171', '#10b981'
+    ];
+    const shuffled = colors.sort(() => Math.random() - 0.5);
+    const grid = document.getElementById('colorGrid');
+    grid.innerHTML = '';
+
+    state.colorTiles = shuffled.map((color, index) => ({
+        id: index,
+        color: color,
+        matched: false,
+        pair: Math.floor(index / 3)
+    }));
+    state.colorFlipped = [];
+    state.colorScore = 0;
+    document.getElementById('colorScore').textContent = '0';
+
+    shuffled.forEach((color, index) => {
+        const tile = document.createElement('div');
+        tile.className = 'color-tile';
+        tile.style.backgroundColor = color;
+        tile.onclick = () => flipColorTile(index);
+        grid.appendChild(tile);
+    });
+}
+
+function flipColorTile(index) {
+    if (state.colorTiles[index].matched || state.colorFlipped.includes(index) || state.colorFlipped.length >= 2) return;
+
+    state.colorFlipped.push(index);
+    const tile = document.querySelectorAll('.color-tile')[index];
+    tile.classList.add('matched');
+
+    if (state.colorFlipped.length === 2) {
+        setTimeout(() => {
+            if (state.colorTiles[state.colorFlipped[0]].color === state.colorTiles[state.colorFlipped[1]].color) {
+                state.colorTiles[state.colorFlipped[0]].matched = true;
+                state.colorTiles[state.colorFlipped[1]].matched = true;
+                state.colorScore += 10;
+                document.getElementById('colorScore').textContent = state.colorScore;
+            } else {
+                document.querySelectorAll('.color-tile')[state.colorFlipped[0]].classList.remove('matched');
+                document.querySelectorAll('.color-tile')[state.colorFlipped[1]].classList.remove('matched');
+            }
+            state.colorFlipped = [];
+            
+            if (state.colorTiles.every(c => c.matched)) {
+                setTimeout(() => alert(`Color harmony achieved! Score: ${state.colorScore}! 🎨`), 300);
+            }
+        }, 800);
+    }
+}
+
+function resetColorGame() {
+    initColorGame();
+}
+
+// ===== MEMORY GAME =====
+function initMemoryGame() {
+    const emojis = ['🌟', '🎈', '🌸', '🦋', '🌊', '☀️'];
+    const pairs = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+    const grid = document.getElementById('memoryGrid');
+    grid.innerHTML = '';
+
+    state.memoryCards = pairs.map((emoji, index) => ({
+        id: index,
+        emoji: emoji,
+        flipped: false,
+        matched: false
+    }));
+    state.memoryFlipped = [];
+    state.memoryScore = 0;
+    document.getElementById('memoryScore').textContent = '0';
+
+    pairs.forEach((emoji, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.textContent = '?';
+        card.onclick = () => flipMemoryCard(index);
+        grid.appendChild(card);
+    });
+}
+
+function flipMemoryCard(index) {
+    if (state.memoryCards[index].matched || state.memoryCards[index].flipped || state.memoryFlipped.length >= 2) return;
+
+    state.memoryFlipped.push(index);
+    const card = document.querySelectorAll('.memory-card')[index];
+    card.classList.add('flipped');
+    card.textContent = state.memoryCards[index].emoji;
+    state.memoryCards[index].flipped = true;
+
+    if (state.memoryFlipped.length === 2) {
+        setTimeout(() => {
+            if (state.memoryCards[state.memoryFlipped[0]].emoji === state.memoryCards[state.memoryFlipped[1]].emoji) {
+                state.memoryCards[state.memoryFlipped[0]].matched = true;
+                state.memoryCards[state.memoryFlipped[1]].matched = true;
+                document.querySelectorAll('.memory-card').forEach((card, i) => {
+                    if (state.memoryCards[i].matched) card.classList.add('matched');
+                });
+                state.memoryScore += 1;
+                document.getElementById('memoryScore').textContent = state.memoryScore;
+            } else {
+                document.querySelectorAll('.memory-card')[state.memoryFlipped[0]].classList.remove('flipped');
+                document.querySelectorAll('.memory-card')[state.memoryFlipped[1]].classList.remove('flipped');
+                document.querySelectorAll('.memory-card')[state.memoryFlipped[0]].textContent = '?';
+                document.querySelectorAll('.memory-card')[state.memoryFlipped[1]].textContent = '?';
+                state.memoryCards[state.memoryFlipped[0]].flipped = false;
+                state.memoryCards[state.memoryFlipped[1]].flipped = false;
+            }
+            state.memoryFlipped = [];
+
+            if (state.memoryCards.every(c => c.matched)) {
+                setTimeout(() => alert(`Perfect memory! You matched all pairs! 🧠`), 300);
+            }
+        }, 800);
+    }
+}
+
+function resetMemoryGame() {
+    initMemoryGame();
+}
+
+// ===== CLICK GAME =====
+function initClickGame() {
+    state.clickScore = 0;
+    state.clickTime = 30;
+    state.clickGameActive = false;
+    document.getElementById('clickScore').textContent = '0';
+    document.getElementById('clickTimer').textContent = '30';
+    document.getElementById('clickStartBtn').textContent = 'Start Game';
+    document.getElementById('clickTarget').style.display = 'block';
+}
+
+function startClickGame() {
+    if (state.clickGameActive) return;
+    
+    state.clickGameActive = true;
+    state.clickScore = 0;
+    state.clickTime = 30;
+    document.getElementById('clickStartBtn').style.display = 'none';
+    document.getElementById('clickScore').textContent = '0';
+    
+    const timer = setInterval(() => {
+        state.clickTime--;
+        document.getElementById('clickTimer').textContent = state.clickTime;
+        
+        if (state.clickTime <= 0) {
+            clearInterval(timer);
+            state.clickGameActive = false;
+            document.getElementById('clickTarget').style.display = 'none';
+            document.getElementById('clickStartBtn').style.display = 'block';
+            document.getElementById('clickStartBtn').textContent = `Game Over! Score: ${state.clickScore}`;
+            setTimeout(() => {
+                alert(`⚡ Final Score: ${state.clickScore} clicks! ⚡`);
+                initClickGame();
+            }, 500);
+        }
+    }, 1000);
+    
+    moveClickTarget();
+}
+
+function moveClickTarget() {
+    if (!state.clickGameActive) return;
+    
+    const target = document.getElementById('clickTarget');
+    const maxX = window.innerWidth - 150;
+    const maxY = window.innerHeight - 150;
+    
+    target.style.left = (Math.random() * maxX) + 'px';
+    target.style.top = (Math.random() * maxY) + 'px';
+}
+
+function clickTargetClicked(e) {
+    if (!state.clickGameActive) return;
+    
+    e.stopPropagation();
+    state.clickScore++;
+    document.getElementById('clickScore').textContent = state.clickScore;
+    
+    const target = document.getElementById('clickTarget');
+    target.classList.add('hiding');
+    setTimeout(() => {
+        target.classList.remove('hiding');
+        moveClickTarget();
+    }, 300);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const clickTarget = document.getElementById('clickTarget');
+    if (clickTarget) {
+        clickTarget.addEventListener('click', clickTargetClicked);
+    }
+});
+
+// ===== ZEN GAME =====
+function initZenGame() {
+    const grid = document.getElementById('zenGrid');
+    grid.innerHTML = '';
+    
+    state.zenOrbs = Array(4).fill(null).map((_, i) => ({
+        id: i,
+        tapped: false
+    }));
+    state.zenScore = 0;
+    document.getElementById('zenScore').textContent = '0';
+    
+    state.zenOrbs.forEach(orb => {
+        const element = document.createElement('div');
+        element.className = 'zen-orb';
+        element.onclick = () => tapZenOrb(orb.id);
+        element.id = `zen-orb-${orb.id}`;
+        grid.appendChild(element);
+    });
+}
+
+function tapZenOrb(id) {
+    state.zenOrbs[id].tapped = true;
+    const element = document.getElementById(`zen-orb-${id}`);
+    element.classList.add('tapped');
+    element.style.pointerEvents = 'none';
+    
+    const tappedCount = state.zenOrbs.filter(o => o.tapped).length;
+    state.zenScore = (tappedCount / state.zenOrbs.length) * 100;
+    document.getElementById('zenScore').textContent = Math.round(state.zenScore);
+    
+    if (tappedCount === state.zenOrbs.length) {
+        setTimeout(() => {
+            alert('🕉️ Perfect zen harmony reached! 🕉️');
+            resetZenGame();
+        }, 500);
+    }
+}
+
+function resetZenGame() {
+    initZenGame();
+}
+
+// ===== JOURNEY GAME =====
+function initJourneyGame() {
+    state.journeyStep = 0;
+    state.journeySteps = [
+        { emoji: '🌅', title: 'Awakening', text: 'Begin your journey with a fresh perspective' },
+        { emoji: '🚶', title: 'Exploration', text: 'Venture into new experiences' },
+        { emoji: '🧗', title: 'Challenge', text: 'Overcome obstacles and grow stronger' },
+        { emoji: '🏔️', title: 'Achievement', text: 'Reach your peak and celebrate' },
+        { emoji: '🌟', title: 'Transformation', text: 'You\'ve evolved into your best self' }
+    ];
+    
+    displayJourneyStep();
+}
+
+function displayJourneyStep() {
+    const pathDiv = document.getElementById('journeyPath');
+    pathDiv.innerHTML = '';
+    
+    state.journeySteps.forEach((step, index) => {
+        const stepEl = document.createElement('div');
+        stepEl.className = `journey-step ${index === state.journeyStep ? 'active' : ''}`;
+        stepEl.innerHTML = `
+            <div class="step-emoji">${step.emoji}</div>
+            <div class="step-title">${step.title}</div>
+            <div class="step-text">${step.text}</div>
+        `;
+        pathDiv.appendChild(stepEl);
+    });
+    
+    document.getElementById('journeyStep').textContent = state.journeyStep + 1;
+}
+
+function nextJourneyStep() {
+    if (state.journeyStep < state.journeySteps.length - 1) {
+        state.journeyStep++;
+        displayJourneyStep();
+    } else {
+        alert('🌈 You\'ve completed your healing journey! 🌈\n\nRemember: Growth is a continuous adventure.');
+        closeGame();
+    }
+}
